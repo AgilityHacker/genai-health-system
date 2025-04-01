@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "name": "services",
+      "path": "services"
+    },
+    {
+      "name": "infrastructure",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/__pycache__": true
+    },
+    "editor.formatOnSave": true
+  }
+}

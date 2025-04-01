@@ -1,0 +1,35 @@
+name: Build & Smoke Test
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Build all services
+        run: docker compose build
+
+      - name: Start graph-logger for testing
+        run: docker compose up -d graph-logger event-bus neo4j
+
+      - name: Wait for graph-logger to respond
+        run: |
+          for i in {{1..10}}; do
+            if curl -sSf http://localhost:8005; then exit 0; fi
+            echo "Waiting for graph-logger..."
+            sleep 5
+          done
+          echo "graph-logger failed to start" && exit 1
+
+      - name: Shut down services
+        run: docker compose down

@@ -1,0 +1,63 @@
+version: '3.9'
+services:
+  graph-logger:
+    build:
+      context: ./services/graph-logger
+    ports:
+      - "8005:8005"
+    depends_on:
+      - event-bus
+      - neo4j
+  automation-engine:
+    build:
+      context: ./services/automation-engine
+  pattern-detector:
+    build:
+      context: ./services/pattern-detector
+  ocr-watcher:
+    build:
+      context: ./services/ocr-watcher
+  health-profile-ingestor:
+    build:
+      context: ./services/health-profile-ingestor
+  agent-orchestrator:
+    build:
+      context: ./services/agent-orchestrator
+  agent-session-store:
+    build:
+      context: ./services/agent-session-store
+  docling-annotator:
+    build:
+      context: ./services/docling-annotator
+  embedding-service:
+    build:
+      context: ./services/embedding-service
+  mcp-router:
+    build:
+      context: ./services/mcp-router
+  gateway-api:
+    build:
+      context: ./services/gateway-api
+  wellness-dashboard:
+    build:
+      context: ./services/wellness-dashboard
+  event-bus:
+    image: nats
+    ports:
+      - "4222:4222"
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+  neo4j:
+    image: neo4j:5
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    volumes:
+      - neo4j_data:/data
+volumes:
+  neo4j_data:
+  redis_data:

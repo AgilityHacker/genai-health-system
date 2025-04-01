@@ -1,0 +1,1 @@
+print("📸 OCR Watcher service is watching for new files...")
